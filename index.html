@@ -1,258 +1,327 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For My Crush ❤️</title>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Arial, sans-serif;
-    text-align:center;
-    background:linear-gradient(to bottom,#ffd6e7,#fff);
-    min-height:100vh;
-    overflow:hidden;
-    padding:20px;
-}
-
-h1,h2,p{
-    color:#d1006c;
-}
-
-button{
-    padding:12px 24px;
-    margin:10px;
-    border:none;
-    border-radius:25px;
-    background:#ff69b4;
-    color:white;
-    font-size:16px;
-    cursor:pointer;
-}
-
-button:hover{
-    transform:scale(1.05);
-}
-
-#message,
-#game,
-#result{
-    display:none;
-    margin-top:20px;
-}
-
-.flower{
-    position:absolute;
-    top:-50px;
-    font-size:30px;
-    animation:fall linear forwards;
-}
-
-@keyframes fall{
-    from{
-        transform:translateY(-50px) rotate(0deg);
-    }
-    to{
-        transform:translateY(110vh) rotate(360deg);
-    }
-}
-
-#game{
-    margin-top:30px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TE AMO 3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #000;
+            font-family: sans-serif;
+        }
+        #fullscreen-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 100;
+            transition: background 0.3s;
+        }
+        #fullscreen-btn:hover {
+            background: rgba(255,255,255,0.4);
+        }
+        #intro-heart {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            background: #000;
+            cursor: pointer;
+        }
+        .intro-heart-shape {
+            width: 150px;
+            height: 135px;
+            background: #e63946;
+            position: relative;
+            transform: rotate(-45deg);
+            box-shadow: 0 0 60px rgba(230, 57, 70, 0.8);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .intro-heart-shape::before,
+        .intro-heart-shape::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 135px;
+            border-radius: 50%;
+            background: #e63946;
+            box-shadow: 0 0 60px rgba(230, 57, 70, 0.8);
+        }
+        .intro-heart-shape::before {
+            top: -70px;
+            left: 0;
+        }
+        .intro-heart-shape::after {
+            top: 0;
+            left: 70px;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: rotate(-45deg) scale(1); }
+            50% { transform: rotate(-45deg) scale(1.1); }
+        }
+        #main-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+        #bg-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .mensaje {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .mensaje span {
+            display: inline-block;
+            color: #fff;
+            font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff2e63, 0 0 20px #ff2e63, 0 0 40px #ff2e63;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease;
+        }
+    </style>
 </head>
 <body>
+    <button id="fullscreen-btn"></button>
 
-<h1>Hi Crush, ako nga pala si Rex S. Denoyo ❤️</h1>
+    <div id="intro-heart">
+        <div class="intro-heart-shape"></div>
+    </div>
 
-<br>
-
-<button onclick="showLove()">🌸 Pindutin Mo Ako 🌸</button>
-
-<div id="message">
-    <p style="max-width:700px;margin:auto;font-size:18px;">
-        Sorry kung naging torpe ako, hirap kasi mag first move eh hehe 😁
-        kaya dito ko na lang ginawa kung paano ako makapagsabi sa'yo ng
-        nararamdaman ko.
-        <br><br>
-        Btw gusto nga pala kita Crush 🥰❤️
-    </p>
-
-    <br>
-
-    <button onclick="startGame()">💖 May Game Ako Para Sayo 💖</button>
+    <div id="main-content" style="opacity:0; filter: blur(24px);">
+        <canvas id="bg-canvas"></canvas>
+ <div class="mensaje">
+    <span>H</span><span>i</span><span>&nbsp;</span><span>C</span><span>r</span><span>u</span><span>s</span><span>h</span><span>&nbsp;</span><span>🥰</span><br>
+    <span>I</span><span>&nbsp;</span><span>L</span><span>i</span><span>k</span><span>e</span><span>&nbsp;</span><span>Y</span><span>o</span><span>u</span><br>
+    <span>J</span><span>o</span><span>k</span><span>e</span><span>&nbsp;</span><span>L</span><span>a</span><span>n</span><span>g</span><br>
+    <span>A</span><span>n</span><span>o</span><span>&nbsp;</span><span>K</span><span>a</span><br>
+    <span>S</span><span>e</span><span>n</span><span>e</span><span>s</span><span>w</span><span>e</span><span>r</span><span>t</span><span>e</span><br>
+    <span>K</span><span>i</span><span>l</span><span>a</span><span>l</span><span>a</span><span>&nbsp;</span><span>M</span><span>o</span><span>n</span><span>a</span><br>
+    <span>A</span><span>k</span><span>o</span><span>&nbsp;</span><span>N</span><span>o</span><span>h</span><span>?</span><br>
+    <span>S</span><span>I</span><br>
+    <span>R</span><span>e</span><span>x</span><span>&nbsp;</span><span>D</span><span>e</span><span>n</span><span>o</span><span>y</span><span>o</span>
 </div>
 
-<div id="game">
-    <h2 id="question"></h2>
+    </div>
 
-    <br>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let W = window.innerWidth;
+        let H = window.innerHeight;
+        canvas.width = W;
+        canvas.height = H;
 
-    <button id="correctBtn"></button>
-    <button id="wrongBtn" onmouseover="moveWrong()"></button>
-</div>
+        window.addEventListener('resize', () => {
+            W = window.innerWidth;
+            H = window.innerHeight;
+            canvas.width = W;
+            canvas.height = H;
+        });
 
-<div id="result">
-    <h1>💖 Congratulations Crush 💖</h1>
-
-    <br>
-
-    <h2>Natapos mo ang game! 🌹</h2>
-
-    <br>
-
-    <p style="font-size:22px;">
-        At eto na ang gusto kong sabihin...
-        <br><br>
-        ❤️ GUSTO KITA ❤️
-        <br><br>
-        I Love You 🥰🌹
-    </p>
-</div>
-
-<script>
-
-function showLove(){
-
-    document.getElementById("message").style.display = "block";
-
-    for(let i=0;i<50;i++){
-
-        let flower = document.createElement("div");
-
-        flower.className = "flower";
-        flower.innerHTML = "🌸";
-
-        flower.style.left =
-            Math.random() * window.innerWidth + "px";
-
-        flower.style.animationDuration =
-            (Math.random() * 4 + 3) + "s";
-
-        document.body.appendChild(flower);
-
-        setTimeout(()=>{
-            flower.remove();
-        },7000);
-    }
-}
-
-const questions = [
-
-{
-q:"Ano ang mas mabigat? 🤔",
-correct:"❤️ Ang nararamdaman ko sa'yo",
-wrong:"😂 Isang balde ng tubig"
-},
-
-{
-q:"Ano ang hindi nauubos? 😁",
-correct:"❤️ Pagkagusto ko sa'yo",
-wrong:"😂 Load ko"
-},
-
-{
-q:"Sino ang madalas kong naiisip? 🥰",
-correct:"❤️ Ikaw",
-wrong:"😂 Assignment"
-},
-
-{
-q:"Ano ang gusto kong sabihin? 💌",
-correct:"❤️ Gusto kita",
-wrong:"😂 Pahingi ng baon"
-}
-
-];
-
-let current = 0;
-
-function startGame(){
-
-    document.getElementById("game").style.display = "block";
-
-    loadQuestion();
-}
-
-function loadQuestion(){
-
-    document.getElementById("question").innerText =
-        questions[current].q;
-
-    document.getElementById("correctBtn").innerText =
-        questions[current].correct;
-
-    let wrongBtn =
-        document.getElementById("wrongBtn");
-
-    wrongBtn.innerText =
-        questions[current].wrong;
-
-    /* balik sa original position */
-    wrongBtn.style.position = "static";
-    wrongBtn.style.left = "";
-    wrongBtn.style.top = "";
-}
-
-document.getElementById("correctBtn").onclick = function(){
-
-    current++;
-
-    if(current < questions.length){
-
-        loadQuestion();
-
-    }else{
-
-        document.getElementById("game").style.display = "none";
-
-        document.getElementById("result").style.display = "block";
-
-        for(let i=0;i<100;i++){
-
-            let flower =
-                document.createElement("div");
-
-            flower.className = "flower";
-            flower.innerHTML = "💖";
-
-            flower.style.left =
-                Math.random()*window.innerWidth+"px";
-
-            flower.style.animationDuration =
-                (Math.random()*3+2)+"s";
-
-            document.body.appendChild(flower);
-
-            setTimeout(()=>{
-                flower.remove();
-            },5000);
+        function randomColor() {
+            const colors = ['#ff2e63', '#ff4757', '#ff6b81', '#ff9ff3', '#a29bfe', '#6c5ce7', '#fd79a8', '#fab1a0'];
+            return colors[Math.floor(Math.random() * colors.length)];
         }
-    }
-}
 
-function moveWrong(){
+        class Firework {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * W;
+                this.y = H;
+                this.targetX = Math.random() * W;
+                this.targetY = Math.random() * H * 0.5;
+                this.speed = 2 + Math.random() * 2;
+                this.angle = Math.atan2(this.targetY - this.y, this.targetX - this.x);
+                this.color = randomColor();
+                this.trail = [];
+                this.exploded = false;
+            }
+            update() {
+                if (!this.exploded) {
+                    this.trail.push({ x: this.x, y: this.y });
+                    if (this.trail.length > 10) this.trail.shift();
+                    this.x += Math.cos(this.angle) * this.speed;
+                    this.y += Math.sin(this.angle) * this.speed;
+                    const dist = Math.hypot(this.targetX - this.x, this.targetY - this.y);
+                    if (dist < 10) this.explode();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.moveTo(this.trail[0]?.x || this.x, this.trail[0]?.y || this.y);
+                for (let p of this.trail) ctx.lineTo(p.x, p.y);
+                ctx.strokeStyle = this.color;
+                ctx.lineWidth = 2;
+                ctx.stroke();
+            }
+            explode() {
+                this.exploded = true;
+                for (let i = 0; i < 30; i++) {
+                    heartParticles.push(new HeartParticle(this.x, this.y, this.color));
+                }
+                setTimeout(() => this.reset(), 1000);
+            }
+        }
 
-    let btn =
-        document.getElementById("wrongBtn");
+        class HeartParticle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.size = Math.random() * 8 + 4;
+                this.speedX = (Math.random() - 0.5) * 6;
+                this.speedY = (Math.random() - 0.5) * 6;
+                this.alpha = 1;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.fadeSpeed = 0.02 + Math.random() * 0.02;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += 0.05;
+                this.alpha -= this.fadeSpeed;
+                this.rotation += 0.02;
+            }
+            draw() {
+                drawHeart(ctx, this.x, this.y, this.size, this.color, this.alpha, this.rotation);
+            }
+        }
 
-    btn.style.position = "absolute";
+        let fireworks = [];
+        let fireworkMode = "few";
+        let explosionTimeout = null;
+        let heartParticles = [];
+        let heartParticlesActive = false;
 
-    btn.style.left =
-        Math.random()*(window.innerWidth-200)+"px";
+        function animateFireworks() {
+            ctx.fillStyle = 'rgba(0,0,0,0.1)';
+            ctx.fillRect(0, 0, W, H);
+            fireworks.forEach(fw => {
+                fw.update();
+                fw.draw();
+            });
+            heartParticles.forEach((p, i) => {
+                p.update();
+                p.draw();
+                if (p.alpha <= 0) heartParticles.splice(i, 1);
+            });
+            requestAnimationFrame(animateFireworks);
+        }
 
-    btn.style.top =
-        Math.random()*(window.innerHeight-100)+"px";
-}
+        function launchHeartParticles(x, y, color) {
+            for (let i = 0; i < 40; i++) {
+                heartParticles.push(new HeartParticle(x, y, color));
+            }
+        }
 
-</script>
+        function drawHeart(ctx, x, y, size, color, alpha, rotation) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rotation);
+            ctx.globalAlpha = alpha;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(-size / 2, -size / 1.5, -size, size / 3, 0, size);
+            ctx.bezierCurveTo(size, size / 3, size / 2, -size / 1.5, 0, 0);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.restore();
+        }
 
+        function randomHeartColor() {
+            const colors = ['#ff2e63', '#ff4757', '#ff6b81', '#ff9ff3', '#fd79a8'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        const intro = document.getElementById('intro-heart');
+        const main = document.getElementById('main-content');
+        const mensaje = document.querySelector('.mensaje');
+        const spans = document.querySelectorAll('.mensaje span');
+        const letterSpans = Array.from(spans);
+
+        function animateStarsWander(wordSpans, callback) {
+            wordSpans.forEach((span, i) => {
+                setTimeout(() => {
+                    gsap.to(span, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: "back.out(1.7)"
+                    });
+                }, i * 200);
+            });
+            setTimeout(callback, wordSpans.length * 200 + 500);
+        }
+
+        function showStarterSequence(callback) {
+            gsap.to(main, { opacity: 1, filter: 'blur(0px)', duration: 1.5, ease: "power2.out" });
+            setTimeout(() => {
+                animateStarsWander(letterSpans, callback);
+            }, 1000);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            animateFireworks();
+            iniciarAnimaciones();
+        });
+
+        function iniciarAnimaciones() {
+            intro.addEventListener('click', () => {
+                gsap.to(intro, { scale: 2, opacity: 0, duration: 0.8, ease: "power2.in", onComplete: () => intro.remove() });
+                setTimeout(() => {
+                    fireworks = Array.from({ length: 5 }, () => new Firework());
+                    showStarterSequence(() => {});
+                }, 800);
+            });
+        }
+
+        const observer = new MutationObserver(() => {});
+        observer.observe(main, { attributes: true, attributeFilter: ['style'] });
+
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        });
+    </script>
 </body>
 </html>
