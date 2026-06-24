@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Crush ❤️</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    text-align:center;
+    background:linear-gradient(to bottom,#ffd6e7,#fff);
+    min-height:100vh;
+    overflow:hidden;
+    padding:20px;
+}
+
+h1,h2,p{
+    color:#d1006c;
+}
+
+button{
+    padding:12px 24px;
+    margin:10px;
+    border:none;
+    border-radius:25px;
+    background:#ff69b4;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+#message,
+#game,
+#result{
+    display:none;
+    margin-top:20px;
+}
+
+.flower{
+    position:absolute;
+    top:-50px;
+    font-size:30px;
+    animation:fall linear forwards;
+}
+
+@keyframes fall{
+    from{
+        transform:translateY(-50px) rotate(0deg);
+    }
+    to{
+        transform:translateY(110vh) rotate(360deg);
+    }
+}
+
+#game{
+    margin-top:30px;
+}
+</style>
+</head>
+<body>
+
+<h1>Hi Crush, ako nga pala si Rex S. Denoyo ❤️</h1>
+
+<br>
+
+<button onclick="showLove()">🌸 Pindutin Mo Ako 🌸</button>
+
+<div id="message">
+    <p style="max-width:700px;margin:auto;font-size:18px;">
+        Sorry kung naging torpe ako, hirap kasi mag first move eh hehe 😁
+        kaya dito ko na lang ginawa kung paano ako makapagsabi sa'yo ng
+        nararamdaman ko.
+        <br><br>
+        Btw gusto nga pala kita Crush 🥰❤️
+    </p>
+
+    <br>
+
+    <button onclick="startGame()">💖 May Game Ako Para Sayo 💖</button>
+</div>
+
+<div id="game">
+    <h2 id="question"></h2>
+
+    <br>
+
+    <button id="correctBtn"></button>
+    <button id="wrongBtn" onmouseover="moveWrong()"></button>
+</div>
+
+<div id="result">
+    <h1>💖 Congratulations Crush 💖</h1>
+
+    <br>
+
+    <h2>Natapos mo ang game! 🌹</h2>
+
+    <br>
+
+    <p style="font-size:22px;">
+        At eto na ang gusto kong sabihin...
+        <br><br>
+        ❤️ GUSTO KITA ❤️
+        <br><br>
+        I Love You 🥰🌹
+    </p>
+</div>
+
+<script>
+
+function showLove(){
+
+    document.getElementById("message").style.display = "block";
+
+    for(let i=0;i<50;i++){
+
+        let flower = document.createElement("div");
+
+        flower.className = "flower";
+        flower.innerHTML = "🌸";
+
+        flower.style.left =
+            Math.random() * window.innerWidth + "px";
+
+        flower.style.animationDuration =
+            (Math.random() * 4 + 3) + "s";
+
+        document.body.appendChild(flower);
+
+        setTimeout(()=>{
+            flower.remove();
+        },7000);
+    }
+}
+
+const questions = [
+
+{
+q:"Ano ang mas mabigat? 🤔",
+correct:"❤️ Ang nararamdaman ko sa'yo",
+wrong:"😂 Isang balde ng tubig"
+},
+
+{
+q:"Ano ang hindi nauubos? 😁",
+correct:"❤️ Pagkagusto ko sa'yo",
+wrong:"😂 Load ko"
+},
+
+{
+q:"Sino ang madalas kong naiisip? 🥰",
+correct:"❤️ Ikaw",
+wrong:"😂 Assignment"
+},
+
+{
+q:"Ano ang gusto kong sabihin? 💌",
+correct:"❤️ Gusto kita",
+wrong:"😂 Pahingi ng baon"
+}
+
+];
+
+let current = 0;
+
+function startGame(){
+
+    document.getElementById("game").style.display = "block";
+
+    loadQuestion();
+}
+
+function loadQuestion(){
+
+    document.getElementById("question").innerText =
+        questions[current].q;
+
+    document.getElementById("correctBtn").innerText =
+        questions[current].correct;
+
+    let wrongBtn =
+        document.getElementById("wrongBtn");
+
+    wrongBtn.innerText =
+        questions[current].wrong;
+
+    /* balik sa original position */
+    wrongBtn.style.position = "static";
+    wrongBtn.style.left = "";
+    wrongBtn.style.top = "";
+}
+
+document.getElementById("correctBtn").onclick = function(){
+
+    current++;
+
+    if(current < questions.length){
+
+        loadQuestion();
+
+    }else{
+
+        document.getElementById("game").style.display = "none";
+
+        document.getElementById("result").style.display = "block";
+
+        for(let i=0;i<100;i++){
+
+            let flower =
+                document.createElement("div");
+
+            flower.className = "flower";
+            flower.innerHTML = "💖";
+
+            flower.style.left =
+                Math.random()*window.innerWidth+"px";
+
+            flower.style.animationDuration =
+                (Math.random()*3+2)+"s";
+
+            document.body.appendChild(flower);
+
+            setTimeout(()=>{
+                flower.remove();
+            },5000);
+        }
+    }
+}
+
+function moveWrong(){
+
+    let btn =
+        document.getElementById("wrongBtn");
+
+    btn.style.position = "absolute";
+
+    btn.style.left =
+        Math.random()*(window.innerWidth-200)+"px";
+
+    btn.style.top =
+        Math.random()*(window.innerHeight-100)+"px";
+}
+
+</script>
+
+</body>
+</html>
